@@ -56,7 +56,6 @@ $("#city-select").on("change",function(){
     $("body").removeClass();
     statename = $("#state-select").find("option:selected").text(); 
     cityname = $(this).find("option:selected").text(); 
-    //alert(statename+" "+cityname);
     get_index(statename,cityname);
 });
 
