@@ -39,23 +39,52 @@ s_a[34]="Almora|Bageshwar|Bhatwari|Chakrata|Chamoli|Champawat|Dehradun|Deoprayag
 s_a[35]="Adra|Alipurduar|Amlagora|Arambagh|Asansol|Balurghat|Bankura|Bardhaman|Basirhat|Berhampur|Bethuadahari|Birbhum|Birpara|Bishanpur|Bolpur|Bongoan|Bulbulchandi|Burdwan|Calcutta|Canning|Champadanga|Contai|Cooch Behar|Daimond Harbour|Dalkhola|Dantan|Darjeeling|Dhaniakhali|Dhuliyan|Dinajpur|Dinhata|Durgapur|Gangajalghati|Gangarampur|Ghatal|Guskara|Habra|Haldia|Harirampur|Harishchandrapur|Hooghly|Howrah|Islampur|Jagatballavpur|Jalpaiguri|Jhalda|Jhargram|Kakdwip|Kalchini|Kalimpong|Kalna|Kandi|Karimpur|Katwa|Kharagpur|Khatra|Kolkata|Krishnanagar|Mal Bazar|Malda|Manbazar|Mathabhanga|Medinipur|Mekhliganj|Mirzapur|Murshidabad|Nadia|Nagarakata|Nalhati|Nayagarh|Parganas|Purulia|Raiganj|Rampur Hat|Ranaghat|Seharabazar|Siliguri|Suri|Takipur|Tamluk";
 
 var statename = "", cityname = "";
+var state_select = $("#state-select");
+var city_select = $("#city-select");
 
 for (var i=0; i<state_arr.length; i++) {
-	$("#state-select").append("<option value='"+i+"'>"+state_arr[i]+"</option>");
+	$("#states").append("<div data-val='"+i+"' class='state-val'>"+state_arr[i]+"</div>");
 }
-$("#state-select").on("change",function(){
-	$("#city-select").empty();
-	var index = parseInt($(this).val()) + 1;
-	var val = $(this).children("option:selected").text(); 
-	var city_arr = s_a[index].split("|");
-	for (var i=0; i<city_arr.length; i++) {
-		$("#city-select").append("<option value='"+city_arr[i]+"'>"+city_arr[i]+"</option>");
+
+$(".drop-input").on("click focus",function(){
+	$(this).next().show()
+})
+$(document).on("click",function(e){
+	if(!$(e.target).parents().hasClass('drop-list') && !$(e.target).hasClass('drop-input')){
+		$('.drop-list').hide()
+	}
+})
+
+$(".drop-input").on('input',function(){
+	let search_text = $(this).val().toLowerCase();
+	let drop_val_items = $(this).next().children();
+
+	drop_val_items.hide();
+	drop_val_items.each(function(){
+    if($(this).text().toLowerCase().indexOf(search_text) != -1){
+      $(this).show();
+    }
+  });
+})
+
+
+$(document).on("click",'.state-val',function(){
+	city_select.empty();
+	let index = parseInt($(this).attr('data-val')) + 1;
+	let val = $(this).text(); 
+	$(".drop-list").hide();
+	state_select.val(val)
+	let city_arr = s_a[index].split("|");
+	for (let i=0; i<city_arr.length; i++) {
+		$("#cities").append("<div data-val='"+city_arr[i]+"' class='city-val'>"+city_arr[i]+"</div>");
 	}
 });
-$("#city-select").on("change",function(){
+$(document).on("click",'.city-val',function(){
 	$("body").removeClass();
-	statename = $("#state-select").find("option:selected").text(); 
-	cityname = $(this).find("option:selected").text(); 
+	$(".drop-list").hide();
+	statename = state_select.val(); 
+	city_select.val($(this).text()); 
+	cityname = $(this).text(); 
 	get_index(statename,cityname);
 });
 
