@@ -41,96 +41,96 @@ s_a[35]="Adra|Alipurduar|Amlagora|Arambagh|Asansol|Balurghat|Bankura|Bardhaman|B
 var statename = "", cityname = "";
 
 for (var i=0; i<state_arr.length; i++) {
-    $("#state-select").append("<option value='"+i+"'>"+state_arr[i]+"</option>");
+	$("#state-select").append("<option value='"+i+"'>"+state_arr[i]+"</option>");
 }
 $("#state-select").on("change",function(){
-    $("#city-select").empty();
-    var index = parseInt($(this).val()) + 1;
-    var val = $(this).children("option:selected").text(); 
-    var city_arr = s_a[index].split("|");
-    for (var i=0; i<city_arr.length; i++) {
-        $("#city-select").append("<option value='"+city_arr[i]+"'>"+city_arr[i]+"</option>");
-    }
+	$("#city-select").empty();
+	var index = parseInt($(this).val()) + 1;
+	var val = $(this).children("option:selected").text(); 
+	var city_arr = s_a[index].split("|");
+	for (var i=0; i<city_arr.length; i++) {
+		$("#city-select").append("<option value='"+city_arr[i]+"'>"+city_arr[i]+"</option>");
+	}
 });
 $("#city-select").on("change",function(){
-    $("body").removeClass();
-    statename = $("#state-select").find("option:selected").text(); 
-    cityname = $(this).find("option:selected").text(); 
-    get_index(statename,cityname);
+	$("body").removeClass();
+	statename = $("#state-select").find("option:selected").text(); 
+	cityname = $(this).find("option:selected").text(); 
+	get_index(statename,cityname);
 });
 
-
-
 function get_index(state,city){
-    $.getJSON("https://api.data.gov.in/resource/3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69?api-key=579b464db66ec23bdd000001cdd3946e44ce4aad7209ff7b23ac571b&format=json&limit=1&filters[state]="+state+"&filters[city]="+city,function(data){
-        //console.log(data.records[0].pollutant_avg);
-        console.log(data);
-        if(data.records.length != 0)
-        {   
-            var pollutant_avg = parseInt(data.records[0].pollutant_avg);
-            var status= "";
-            var concern = "";
-            var bodyclass = "statuscolor ";
-            if(pollutant_avg>=0 && pollutant_avg <= 30){
-                status = "Good";
-                bodyclass +="good";
-                concern = "Minimal impact";
-            }
-            else if(pollutant_avg>30 && pollutant_avg <= 60){
-                status = "Satisfactory";
-                bodyclass +="satisfactory";
-                concern ="May cause minor breathing discomfort to sensitive people.";
-            }
-            else if(pollutant_avg>61 && pollutant_avg <= 90){
-                status = "Moderately polluted";
-                bodyclass +="moderate";
-                concern ="May cause breathing discomfort to people with lung disease such as asthma, and discomfort to people with heart disease, children and older adults.";
-            }
-            else if(pollutant_avg>90 && pollutant_avg <= 120){
-                status = "Poor";
-                bodyclass +="poor";
-                concern ="May cause breathing discomfort to people on prolonged exposure, and discomfort to people with heart disease.";
-            }
-            else if(pollutant_avg>120 && pollutant_avg <= 250){
-                status = "Very Poor";
-                bodyclass +="verypoor";
-                concern ="May cause respiratory illness to the people on prolonged exposure. Effect may be more pronounced in people with lung and heart diseases.";
-            }
-            else if(pollutant_avg>250){
-                status = "Severe";
-                bodyclass +="severe";
-                concern ="May cause respiratory impact even on healthy people, and serious health impacts on people with lung/heart disease. The health impacts may be experienced even during light physical activity.";
-            }
-            var target_city = data.records[0].city+", "+data.records[0].state;
-            var months = [ "January", "February", "March", "April", "May", "June", 
-           "July", "August", "September", "October", "November", "December" ];
-            var lastupdate = data.records[0].last_update;
-            var datetime = lastupdate.split(' ');
-            var datearr = datetime[0].split('-');
-            var monthnum = datearr[1] - 1;
-            var date = datearr[0]+" "+months[monthnum]+", "+datearr[2];
-            var time = datetime[1];
-            var station= data.records[0].station;
-            var source = data.source;
+	$.getJSON("https://api.data.gov.in/resource/3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69?api-key=579b464db66ec23bdd000001cdd3946e44ce4aad7209ff7b23ac571b&format=json&limit=1&filters[state]="+state+"&filters[city]="+city,function(data){
+		if(data.records.length != 0){   
+			var pollutant_avg = parseInt(data.records[0].pollutant_avg);
+			var status= "";
+			var concern = "";
+			var bodyclass = "statuscolor ";
+			if(!isNaN(pollutant_avg)){
+				if(pollutant_avg>=0 && pollutant_avg <= 30){
+					status = "Good";
+					bodyclass +="good";
+					concern = "Minimal impact";
+				}
+				else if(pollutant_avg>30 && pollutant_avg <= 60){
+					status = "Satisfactory";
+					bodyclass +="satisfactory";
+					concern ="May cause minor breathing discomfort to sensitive people.";
+				}
+				else if(pollutant_avg>61 && pollutant_avg <= 90){
+					status = "Moderately polluted";
+					bodyclass +="moderate";
+					concern ="May cause breathing discomfort to people with lung disease such as asthma, and discomfort to people with heart disease, children and older adults.";
+				}
+				else if(pollutant_avg>90 && pollutant_avg <= 120){
+					status = "Poor";
+					bodyclass +="poor";
+					concern ="May cause breathing discomfort to people on prolonged exposure, and discomfort to people with heart disease.";
+				}
+				else if(pollutant_avg>120 && pollutant_avg <= 250){
+					status = "Very Poor";
+					bodyclass +="verypoor";
+					concern ="May cause respiratory illness to the people on prolonged exposure. Effect may be more pronounced in people with lung and heart diseases.";
+				}
+				else if(pollutant_avg>250){
+					status = "Severe";
+					bodyclass +="severe";
+					concern ="May cause respiratory impact even on healthy people, and serious health impacts on people with lung/heart disease. The health impacts may be experienced even during light physical activity.";
+				}
+				var target_city = data.records[0].city+", "+data.records[0].state;
+				var months = [ "January", "February", "March", "April", "May", "June", 
+					"July", "August", "September", "October", "November", "December" ];
+				var lastupdate = data.records[0].last_update;
+				var datetime = lastupdate.split(' ');
+				var datearr = datetime[0].split('-');
+				var monthnum = datearr[1] - 1;
+				var date = datearr[0]+" "+months[monthnum]+", "+datearr[2];
+				var time = datetime[1];
+				var station= data.records[0].station;
+				var source = data.source;
 
-            $(".nodata,.default-text").hide();
-            $(".result-wrapper .result-data").show();
-            $("body").addClass(bodyclass);
-            $(".status").text(status);
-            $(".pollutant_avg").text(pollutant_avg);
-            $(".target_city").text(target_city);
-            $(".concern").text(concern);
-            $(".last_update").text("(Last Updated: "+date+" at "+time+")");
-            $(".station").html("<span class='font-med'>Station: </span>"+station);
-            $(".source").html("<span class='font-med'>Source: </span><a href='https://www."+source+"' target='_blank'>"+source+"</a>");
-        }
-        else{
-            //$(".result-wrapper").empty();
-            $(".nodata").show();
-            $(".default-text,.result-data").hide();
-        }
+				$(".nodata,.default-text").hide();
+				$(".result-wrapper .result-data").show();
+				$("body").addClass(bodyclass);
+				$(".status").text(status);
+				$(".pollutant_avg").text(pollutant_avg);
+				$(".target_city").text(target_city);
+				$(".concern").text(concern);
+				$(".last_update").text("(Last Updated: "+date+" at "+time+")");
+				$(".station").html("<span class='font-med'>Station: </span>"+station);
+				$(".source").html("<span class='font-med'>Source: </span><a href='https://www."+source+"' target='_blank'>"+source+"</a>");
+			}
+			else{   
+				$(".nodata").show();
+				$(".default-text,.result-data").hide();
+			}
+		}
+		else{
+			$(".nodata").show();
+			$(".default-text,.result-data").hide();
+		}
 
-        
-        
-    });
+
+
+	});
 }
