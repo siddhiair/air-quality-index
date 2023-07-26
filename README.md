@@ -24,4 +24,4 @@ You can try out the live demo [here](https://siddhiair.github.io/air-quality-ind
 
 
 ### API Integration
-The Air Quality Index (AQI) API App integrates with a reliable air quality data API to provide real-time air quality information. The API endpoint used for fetching data is [https://api.data.gov.in/resource/3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69]. For more information [visit](https://data.gov.in/resource/real-time-air-quality-index-various-locations)
+The Air Quality Index (AQI) API App integrates with a reliable air quality data API to provide real-time air quality information. The API endpoint used for fetching data is https://api.data.gov.in/resource/3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69. For more information [visit this link](https://data.gov.in/resource/real-time-air-quality-index-various-locations).
